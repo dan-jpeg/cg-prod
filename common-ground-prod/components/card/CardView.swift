@@ -32,8 +32,12 @@ struct CardView: View {
                             }
                         }
             .overlay {
-                Image(systemName: "person.fill")
-                    .foregroundColor(.white)
+                VStack {
+                    Text(item.name)
+                    Text(item.name2)
+                    Text(item.city)
+                        .foregroundColor(.white)
+                }
             }
             .background(
                 .ultraThinMaterial, in:

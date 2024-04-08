@@ -100,45 +100,45 @@ struct RoloView: View {
     
     var body: some View {
         ScrollView {
-            if !rolodexState.connectionsArray.isEmpty {
-                ForEach(rolodexState.connectionsArray) { connectionID in
-                    
-                    VStack(spacing: 8) {
-                        HStack(spacing: 16) {
-                            Text(connectionID.userId2)
-                                .font(.caption2)
-                                .textCase(.uppercase)
-                                .opacity(0.8)
-                            Text(connectionID.userId1)
-                                .font(.caption2)
-                                .textCase(.uppercase)
-                                .opacity(0.8)
-                        }
-                        
-                        Text(connectionID.dateCreated.description)
-                            .font(.caption2)
-                            .textCase(.uppercase)
-                            .opacity(0.8)
-                        Text("revealed: \(connectionID.connectionRevealed.description)")
-                            .font(.caption2)
-                            .textCase(.uppercase)
-                            .opacity(0.8)
-                        
-                    }
-                   
-                        
-                }
-            }
-            
-            if !rolodexState.connectedUsers.isEmpty {
-                
-                ForEach(rolodexState.connectedUsers) { user in
-                    if let city = user.city {
-                        Text(city)
-                    }
-                   
-                }
-            }
+//            if !rolodexState.connectionsArray.isEmpty {
+//                ForEach(rolodexState.connectionsArray) { connectionID in
+//                    
+//                    VStack(spacing: 8) {
+//                        HStack(spacing: 16) {
+//                            Text(connectionID.userId2)
+//                                .font(.caption2)
+//                                .textCase(.uppercase)
+//                                .opacity(0.8)
+//                            Text(connectionID.userId1)
+//                                .font(.caption2)
+//                                .textCase(.uppercase)
+//                                .opacity(0.8)
+//                        }
+//                        
+//                        Text(connectionID.dateCreated.description)
+//                            .font(.caption2)
+//                            .textCase(.uppercase)
+//                            .opacity(0.8)
+//                        Text("revealed: \(connectionID.connectionRevealed.description)")
+//                            .font(.caption2)
+//                            .textCase(.uppercase)
+//                            .opacity(0.8)
+//                        
+//                    }
+//                   
+//                        
+//                }
+//            }
+//            
+//            if !rolodexState.connectedUsers.isEmpty {
+//                
+//                ForEach(rolodexState.connectedUsers) { user in
+//                    if let city = user.city {
+//                        Text(city)
+//                    }
+//                   
+//                }
+//            }
             VStack(alignment: .leading, spacing: 1) {
                 
                 HStack {
@@ -158,10 +158,7 @@ struct RoloView: View {
                 
                 Spacer(minLength: 50)
              CityCardFlow(rolodexState: rolodexState, cityName: "new york city")
-             CityCardFlow(rolodexState: rolodexState, cityName: "Chicago")
-             CityCardFlow(rolodexState: rolodexState, cityName: "LOS ANGELES")
-             CityCardFlow(rolodexState: rolodexState, cityName: "london")
-             CityCardFlow(rolodexState: rolodexState, cityName: "SEOUL, SK")
+          
                 
                
                 

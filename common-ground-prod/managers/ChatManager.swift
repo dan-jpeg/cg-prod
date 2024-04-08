@@ -58,7 +58,17 @@ final class ChatManager {
               throw error
           }
       }
-}
+    
+    //takes an array of userIDs, userArray and creates a new conversation between the two
+    func createConversation(userArray: [String]) -> [Conversation] {
+        
+        let newConversation = db.collection("conversations")
+        
+        
+        
+        return []
+    }
+ }
 
 //
 //func getUser(userID: String) async throws -> DBUser {

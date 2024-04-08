@@ -64,6 +64,7 @@
 		E1E1351C2BA4E5DB00739730 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E1351B2BA4E5DB00739730 /* LogoView.swift */; };
 		E1E1351E2BA4F64A00739730 /* RootView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E1351D2BA4F64A00739730 /* RootView2.swift */; };
 		E1E135202BA5072C00739730 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E1351F2BA5072C00739730 /* HeaderView.swift */; };
+		E1E48E942BC461740084C632 /* NewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E48E932BC461740084C632 /* NewMessageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -119,6 +120,7 @@
 		E1E1351B2BA4E5DB00739730 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		E1E1351D2BA4F64A00739730 /* RootView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView2.swift; sourceTree = "<group>"; };
 		E1E1351F2BA5072C00739730 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		E1E48E932BC461740084C632 /* NewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMessageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +192,7 @@
 		E12966782BA2BBBA00380EEC /* common-ground-prod */ = {
 			isa = PBXGroup;
 			children = (
+				E1E48E932BC461740084C632 /* NewMessageView.swift */,
 				E1E1351A2BA4E59000739730 /* components */,
 				E15D728B2BA7983D00D68A05 /* map */,
 				E11A7A992BA8C19D00169DD5 /* onboarding */,
@@ -443,6 +446,7 @@
 				E13440172BC21C0100A6DD52 /* ConnectionManager.swift in Sources */,
 				E189EB3B2BADF2F20050CEC6 /* InboxView2.swift in Sources */,
 				E189EB292BAD00130050CEC6 /* CityCardFlow.swift in Sources */,
+				E1E48E942BC461740084C632 /* NewMessageView.swift in Sources */,
 				E1878CF62BB105D7003BB0C8 /* ChatViewHeader.swift in Sources */,
 				E129667C2BA2BBBA00380EEC /* ContentView.swift in Sources */,
 				E14070822BA2C64B00756051 /* AuthManager.swift in Sources */,

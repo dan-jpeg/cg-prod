@@ -68,6 +68,18 @@ struct CardFlowItem: Identifiable, Equatable {
     var name: String
     var name2: String
     var city: String
+    
+    init(name: String, name2: String, city: String) {
+        self.name = name
+        self.name2 = name2
+        self.city = city
+    }
+    
+    init(connectedUser: ConnectedUser) {
+        self.name = connectedUser.firstName ?? ""
+        self.name2 = connectedUser.surname ?? ""
+        self.city = connectedUser.city ?? ""
+    }
 }
 
 //#Preview {
