@@ -14,6 +14,7 @@ struct ChatInputField: View {
     @Binding var newMessageBody: String
     
     var onEnterPressed: (()->Void)? = nil
+    var onTextChanged: ((String) -> Void)? = nil  // Add this line
     
     
     var body: some View {
@@ -22,6 +23,9 @@ struct ChatInputField: View {
                 .foregroundColor(.black)
                 .font(.system(.subheadline, design: .monospaced, weight: .bold))
                 .padding(EdgeInsets(top: 15, leading: 60, bottom: 15, trailing: 60))
+                .onChange(of: newMessageBody) { oldValue, newValue in
+                    onTextChanged?(newValue)
+                }
         }
         .background {
             ZStack {

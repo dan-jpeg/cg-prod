@@ -54,7 +54,7 @@ struct HomeView: View {
         
         ZStack {
             RoundedRectangle(cornerRadius: 30) // Set your desired corner radius here
-                .stroke(borderColor, lineWidth: 2) // Set the color and line width of the border
+                .stroke(borderColor.opacity(0.00), lineWidth: 2) // Set the color and line width of the border
                 .background(RoundedRectangle(cornerRadius: 25).fill(Color.white))
             
                 .padding(.init(top: 70, leading: 12, bottom: 20, trailing: 12))

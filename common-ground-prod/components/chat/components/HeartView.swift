@@ -11,9 +11,15 @@ struct HeartView: View {
     
     var hasFill: Bool = true
     
+    var size: CGFloat = 10
+    
     var body: some View {
+        
+        let offset = [-(size/5), size/4]
+        let offsetOverlay = [-(size/10),0]
+                        
         VStack(alignment: .center) {
-            LogoViewNoNamespace(size: 10, rotationEffect: 50, rotationOverlay: -38, offset: [-2 ,2.5], offsetOverlay: [-1,0])
+            LogoViewNoNamespace(size: size, rotationEffect: 50, rotationOverlay: -38, offset: offset, offsetOverlay: offsetOverlay)
                 .rotationEffect(Angle(degrees: -7))
                 .padding(0)
 //                    LogoViewNoNamespace(size: 40, rotationEffect: 20, rotationOverlay: 20, offset: [5 , 10])
@@ -26,6 +32,27 @@ struct HeartView: View {
 }
 
 #Preview {
-    HeartView()
+    VStack {
+        VStack {
+            HeartView()
+        }
+        .frame(maxHeight: .infinity)
+        VStack {
+            HeartView(size: 20)
+        }
+        .frame(maxHeight: .infinity)
+        VStack {
+            HeartView(size: 30)
+        }
+        .frame(maxHeight: .infinity)
+        
+        HStack {
+            
+        } .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    
+
+    
 }
 

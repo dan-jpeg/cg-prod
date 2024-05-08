@@ -17,8 +17,7 @@ class RolodexViewModel: ObservableObject {
     @Published var fetchedConnections: [String] = []
     @Published var connectionsArray: [Connection] = []
     @Published var connectedUsers: [ConnectedUser] = []
-    
-    
+    @Published var errorMessage: String = ""
     
     func createNewConnection() async throws {
         let userID = try AuthenticationManager.shared.getAuthenticatedUser().uid
@@ -37,7 +36,9 @@ class RolodexViewModel: ObservableObject {
     }
     
     func fetchConnections() async throws {
-        guard !self.fetchedConnections.isEmpty else { return }
+        guard !self.fetchedConnections.isEmpty else {
+            print("connections empty")
+            return }
         let connections = try await ConnectionManager.shared.fetchConnections(connectionIDs: self.fetchedConnections)
         self.connectionsArray = connections
         
@@ -71,6 +72,36 @@ class RolodexViewModel: ObservableObject {
         // Tasks have been handled, including their errors
         print("Finished fetching connected users.")
     }
+    
+    func createConversation(user2: String) async throws -> String {
+        
+    let userID = self.userID
+        
+        let userArray = [self.userID, user2]
+        let newConversation = try await ChatManager.shared.createConversation(userIDs: userArray)
+        guard let id = newConversation.id else { return "" }
+        return id
+    }
+    
+    func postNewMessage(conversationId: String, recipientId: String, text: String) async throws {
+        
+        
+        
+       
+        
+        let newMessage = Message(senderId: self.userID, recipientId: recipientId, // You might want to adjust this according to your design
+                                 text: text, timestamp: Date(), favorite: false)
+        
+        print(newMessage.text)
+        
+        do {
+            try await ChatManager.shared.postMessage(conversationId: conversationId, message: newMessage)
+            // Assuming success, add the message to the local messages array to update UI
+                    } catch {
+            self.errorMessage = "Failed to post new message: \(error.localizedDescription)"
+        }
+    }
+
 }
 
 enum ConnectionStage {
@@ -234,7 +265,7 @@ struct RoloView: View {
                     do {
                         try await rolodexState.fetchConnectionStringsArray()
                         try await rolodexState.fetchConnections()
-                        try await rolodexState.getConnectedUserInfo()
+                        await rolodexState.getConnectedUserInfo()
                         print("finish fetch")
                     }
                     catch { }

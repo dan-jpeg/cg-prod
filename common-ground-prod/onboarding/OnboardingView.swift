@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftfulUI
 
 
+
 @MainActor
 final class OnboardingViewModel: ObservableObject {
     
@@ -51,6 +52,46 @@ final class OnboardingViewModel: ObservableObject {
     }
 }
 
+
+extension OnboardingViewModel: NameValidationProtocol, DateOfBirthValidationProtocol, PhoneNumberValidationProtocol, CityValidationProtocol {
+    var isNameValid: Bool {
+        return !firstName.isEmpty && !surname.isEmpty
+    }
+
+    var isDateOfBirthValid: Bool {
+        // Assuming YYYY format for simplicity
+        return dateOfBirth.count == 4 && Int(dateOfBirth) != nil
+    }
+
+    var isPhoneNumberValid: Bool {
+        // Example: US standard phone number length without considering country code
+        return phoneNumber.count == 10 && Int(phoneNumber) != nil
+    }
+
+    var isCityValid: Bool {
+        return !city.isEmpty
+    }
+}
+
+protocol NameValidationProtocol {
+    var isNameValid: Bool { get }
+}
+
+protocol DateOfBirthValidationProtocol {
+    var isDateOfBirthValid: Bool { get }
+}
+
+protocol PhoneNumberValidationProtocol {
+    var isPhoneNumberValid: Bool { get }
+}
+
+protocol CityValidationProtocol {
+    var isCityValid: Bool { get }
+}
+
+
+
+    
 enum OnboardingViewState {
     case preTap
     case name
@@ -78,6 +119,7 @@ struct OnboardingView: View {
     @StateObject private var viewModel = OnboardingViewModel()
     @EnvironmentObject var navigationManager: NavigationManager
     
+    
     var body: some View {
         VStack {
             Image("onboardingImage")
@@ -85,7 +127,12 @@ struct OnboardingView: View {
                 .frame(width: 200, height: 120)
                 .padding(.bottom, 50)
             VStack(spacing: 40) {
-                
+                if viewModel.errorMessage != "" {
+                    Text(viewModel.errorMessage)
+                        .font(.caption2)
+                        .fontWeight(.medium)
+                        .textCase(.uppercase)
+                }
                 switch viewState {
                 case .preTap:
                     Text("tap")
@@ -100,7 +147,13 @@ struct OnboardingView: View {
                         
                         Text("->")
                             .asButton {
-                                viewState = .dateOfBirth
+                                if viewModel.isNameValid {
+                                    viewState = .dateOfBirth
+                                    viewModel.errorMessage = ""
+                                }
+                                else {
+                                    viewModel.errorMessage = "please enter a valid name"
+                                }
                             }
                     }
                     
@@ -111,7 +164,14 @@ struct OnboardingView: View {
                         
                         Text("->")
                             .asButton {
-                                viewState = .phoneNumber
+                                if viewModel.isDateOfBirthValid {
+                                    viewState = .phoneNumber
+                                    viewModel.errorMessage = ""
+                                } else {
+                                    viewModel.errorMessage = "please enter a valid dob"
+                                    
+                                }
+                               
                             }
                     }
                     
@@ -120,7 +180,12 @@ struct OnboardingView: View {
                         CustomTextField(icon: "phone", placeHolder: "CAN WE HAVE YOUR NUMBER?", text: $viewModel.phoneNumber, isSecure: false)
                         Text("->")
                             .asButton {
-                                viewState = .city
+                                if viewModel.isPhoneNumberValid {
+                                    viewModel.errorMessage = ""
+                                    viewState = .city
+                                } else {
+                                    viewModel.errorMessage = "please enter a valid phone number"
+                                }
                             }
                     }
                 case .city:
@@ -129,9 +194,15 @@ struct OnboardingView: View {
                         Button("go") {
                             Task {
                                 do {
-                                    try await viewModel.onboardUser()
-                                    isOnboarding = false
-                                    navigationManager.appState = .authenticated
+                                    if viewModel.isCityValid {
+                                        viewModel.errorMessage = ""
+                                        try await viewModel.onboardUser()
+                                        isOnboarding = false
+                                        navigationManager.appState = .authenticated
+                                    }
+                                    else {
+                                        viewModel.errorMessage = "please enter a valid city"
+                                    }
                                 }
                                 catch {
                                     print("error posting")
@@ -148,6 +219,8 @@ struct OnboardingView: View {
             }
         }.padding()
     }
+    
+   
 }
 
 

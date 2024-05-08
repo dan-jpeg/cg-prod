@@ -72,11 +72,11 @@ final class ConnectionManager {
             
         }
         
-        guard var connectionIds = data["connections"] as? [String] else { return ["no connections"]}
+        guard var connectionIds = data["connections"] as? [String] else { return ["connections:","no connections"]}
         
          
-        connectionIds.removeFirst()
         
+        print(connectionIds)
         return connectionIds
         
     }

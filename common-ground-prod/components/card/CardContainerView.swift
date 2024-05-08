@@ -18,7 +18,7 @@ struct CardContainerView: View {
     var body: some View {
         VStack {
             Spacer(minLength: 0)
-            CardFlowView(itemWidth: itemWidth, spacing: 30, items: connectedUsers.map { CardFlowItem(name: $0.firstName ?? "", name2: $0.surname ?? "", city: $0.city ?? "") }, rotation: 0) { item in
+            CardFlowView(itemWidth: itemWidth, spacing: 30, items: connectedUsers.map { CardFlowItem(name: $0.firstName ?? "", name2: $0.surname ?? "", city: $0.city ?? "", userID: $0.id) }, rotation: 0) { item in
                 CardView(rolodexState: rolodexState, item: item, isSelected: rolodexState.selectedCard == item, isAnyCardSelected: rolodexState.selectedCard != nil)
             }
             .frame(minHeight: height)

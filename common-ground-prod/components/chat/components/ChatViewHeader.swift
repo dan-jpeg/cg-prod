@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ChatViewHeader: View {
     
+    var name: String = "jinny xu"
     @Binding var menuState: MenuState
     var namespace: Namespace.ID
     @Binding var isChatViewPresented: Bool
@@ -17,17 +18,19 @@ struct ChatViewHeader: View {
     var body: some View {
         VStack {
             HStack {
-                VStack(alignment: .trailing, spacing: 5) {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("jinni")
-                        Text("xu")
+                VStack(alignment: .trailing, spacing: 4) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(name)
                     }
+                    .frame(maxHeight: .infinity, alignment: .bottom)
                     .font(.system(.caption, design: .monospaced, weight: .light))
                                   
                   
                   
                     HStack(alignment: .bottom) {
-                        Text(" < ")
+                        Image(systemName: "arrow.backward.square")
+                            .font(.system(size: 30))
+                            .fontWeight(.medium)
                             .onTapGesture {
                                 withAnimation(.smooth) {
                                     isChatViewPresented = false
@@ -35,7 +38,7 @@ struct ChatViewHeader: View {
                                 }
                             }
                         
-                    }
+                    } .frame(maxHeight: .infinity, alignment: .leading)
                     
                 }
                 
@@ -48,9 +51,7 @@ struct ChatViewHeader: View {
                 VStack(spacing: 24){
                     
                     LogoView(size: 30, namespace: namespace)
-                    
-                    
-                    
+           
                     VStack {
                         Text("CO")
                         Text("GR")
@@ -70,6 +71,6 @@ struct ChatViewHeader: View {
                 .padding(30)
             }
             Divider()
-        }
+        }.frame(height: 222)
     }
 }

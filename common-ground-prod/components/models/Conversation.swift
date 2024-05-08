@@ -5,17 +5,17 @@ import FirebaseFirestoreSwift
 
 struct Conversation: Identifiable, Codable {
     @DocumentID var id: String?
+    var participants: [String: String]  // Mapping from userID to displayName
     var lastMessage: String?
     var lastMessageTimestamp: Date?
-    var participants: [String]
-    var unreadCount: Int
-
+    var lastRead: [String: Date]
+    
     enum CodingKeys: String, CodingKey {
         case id
+        case participants
         case lastMessage
         case lastMessageTimestamp
-        case participants
-        case unreadCount
+        case lastRead
     }
 }
 
@@ -26,10 +26,15 @@ struct Message: Codable, Identifiable {
     let recipientId: String
     let text: String
     let timestamp: Date
-    let favorite: Bool
+    var favorite: Bool
     
     
 }
 
 //
 //struct ChatUser: Codable
+
+//struct Participant: Codable {
+//    var userID: String
+//    var displayName: String
+//}

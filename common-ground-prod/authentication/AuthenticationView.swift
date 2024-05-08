@@ -24,10 +24,8 @@ struct TapAnyWhereView: View {
         VStack {
             VStack {
                 LogoTextView(namespace: namespace)
-//                LogoView(size: 100, namespace: namespace)
+                LogoView(size: 100, namespace: namespace)
                 MoonPhaseView()
-                    
-                    
                 
             }
             .padding(.top, UIScreen.main.bounds.height/5)

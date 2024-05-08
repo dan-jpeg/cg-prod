@@ -12,52 +12,79 @@ struct CardView: View {
     @ObservedObject var rolodexState: RolodexViewModel
     
     
+    
+
+    
     let item: CardFlowItem
     var isSelected: Bool
     var isAnyCardSelected: Bool
     
-    @State private var showCardSheet = false
+    @State private var flipped = false
+    @State private var messageSent = false
+    
     
     var body: some View {
-        RoundedRectangle(cornerRadius: 5)
-            .fill(Color.gray.opacity(opacityBasedOnSelection()))
-            
-            
-            .frame(width: rolodexState.selectedCard == item ? 120 : 100, height: rolodexState.selectedCard == item ? 110 : 100) // Adjust size based on selection
-            .onTapGesture {
-                            withAnimation {
-                                
-                                rolodexState.selectedCard = rolodexState.selectedCard == item ? nil : item
-                                showCardSheet.toggle()
+        
+        VStack {
+            if !flipped {
+                RoundedRectangle(cornerRadius: 5)
+                    .fill(Color.gray.opacity(opacityBasedOnSelection()))
+                    .frame(width: rolodexState.selectedCard == item ? 120 : 100, height: rolodexState.selectedCard == item ? 110 : 100) // Adjust size based on selection
+                    .onTapGesture {
+                        flipped = true
+                    }
+                    .overlay {
+                        VStack {
+                            Text(item.name)
+                            Text(item.name2)
+                            Text(item.city)
+                                .foregroundColor(.black)
+                        }
+                        .font(.caption2)
+                        .textCase(.uppercase)
+                        .fontWeight(.semibold  )
+                    }
+
+            } else {
+                if !messageSent {
+                    Text("say heyyy")
+                        .onTapGesture {
+                            Task {
+                                do {
+                                    // Try to create a conversation and get its ID.
+                                    let conversationID = try await rolodexState.createConversation(user2: item.userID)                                    // Use the conversation ID to post a new message.
+                                    try await rolodexState.postNewMessage(conversationId: conversationID, recipientId: item.userID, text: "heyyy")
+                                    messageSent = true
+                                } catch {
+                                    // Handle any errors
+                                    print(error)
+                                }
                             }
                         }
-            .overlay {
-                VStack {
-                    Text(item.name)
-                    Text(item.name2)
-                    Text(item.city)
-                        .foregroundColor(.white)
+                } else {
+                    Text("msg sent!")
+
                 }
             }
-            .background(
-                .ultraThinMaterial, in:
-                
-                    .rect(cornerRadius: 5)
-                )
-            .sheet(isPresented: $showCardSheet) {
-                CardSheet()
-                    .presentationDetents([.fraction(6.1/10), .large])
-                    .presentationDragIndicator(.hidden)
-            }
-        
+                            
+        }
+       
+
+            
+//            .sheet(isPresented: $showCardSheet) {
+//                CardSheet(item: item)
+//                    .presentationDetents([.fraction(6.1/10), .large])
+//                    .presentationDragIndicator(.hidden)
+//            }
+//        
     }
     
     func opacityBasedOnSelection() -> Double {
            guard let selectedCard = rolodexState.selectedCard else {
-               return 1.0 // No card is selected, normal opacity
+               return 0.01 // No card is selected, normal opacity
            }
            
-           return item == selectedCard ? 1.0 : 0.22 // Reduce opacity if not the selected card
+           return item == selectedCard ? 0 : 0.0 // Reduce opacity if not the selected card
        }
 }
 

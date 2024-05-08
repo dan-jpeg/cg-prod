@@ -15,6 +15,8 @@ final class ChatViewModel: ObservableObject {
     @Published private(set) var user: DBUser? = nil
     @Published var messages: [Message] = []
     @Published var chatPartner: DBUser? = nil
+    @Published var isUserTyping: [String: Bool] = [:]
+    
     
     
     
@@ -32,7 +34,7 @@ final class ChatViewModel: ObservableObject {
     
     func loadMessages(conversationId: String, userId: String) async {
         do {
-            let fetchedMessages = try await ChatManager.shared.fetchMessages(conversationId: conversationId, userId: userId)
+            let fetchedMessages = try await ChatManager.shared.fetchMessages(conversationId: conversationId)
             self.messages = fetchedMessages
             
         } catch {
@@ -40,7 +42,7 @@ final class ChatViewModel: ObservableObject {
         }
     }
     
-    func postNewMessage(conversationId: String, userId: String, text: String) async throws {
+    func postNewMessage(conversationId: String, recipientId: String, text: String) async throws {
         
         let authUser = try AuthenticationManager.shared.getAuthenticatedUser()
         self.user = try await UserManager.shared.getUser(userID: authUser.uid)
@@ -50,13 +52,13 @@ final class ChatViewModel: ObservableObject {
             return
         }
         
-        let newMessage = Message(senderId: user.userId, recipientId: "", // You might want to adjust this according to your design
+        let newMessage = Message(senderId: user.userId, recipientId: recipientId, // You might want to adjust this according to your design
                                  text: text, timestamp: Date(), favorite: false)
         
         print(newMessage.text)
         
         do {
-            try await ChatManager.shared.postMessage(conversationId: conversationId, userId: userId, message: newMessage)
+            try await ChatManager.shared.postMessage(conversationId: conversationId, message: newMessage)
             // Assuming success, add the message to the local messages array to update UI
             DispatchQueue.main.async {
                 self.messages.append(newMessage)
@@ -65,16 +67,52 @@ final class ChatViewModel: ObservableObject {
             self.errorMessage = "Failed to post new message: \(error.localizedDescription)"
         }
     }
-}
+    
+    func toggleFavorite(for messageId: String, in conversationId: String, isFavorite: Bool) async {
+        do {
+            try await ChatManager.shared.toggleFavorite(for: messageId, in: conversationId, isFavorite: isFavorite)
+            // After toggling, you may want to reload or update the specific message in your messages array
+            // to reflect the change in the UI.
+            if let index = messages.firstIndex(where: { $0.id == messageId }) {
+                messages[index].favorite = !isFavorite
+            }
+        } catch {
+            self.errorMessage = "Failed to toggle favorite status: \(error.localizedDescription)"
+        }
+    }
+    
+    func updateTypingStatus(conversationId: String, userId: String, isTyping: Bool) async {
+            do {
+                try await ChatManager.shared.setUserTyping(conversationId: conversationId, userId: userId, isTyping: isTyping)
+            } catch {
+                print("Failed to update typing status: \(error)")
+            }
+        }
+
+    func startTypingListener(conversationId: String) {
+        ChatManager.shared.listenForTyping(conversationId: conversationId) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let typingStatus):
+                    self?.isUserTyping = typingStatus
+                case .failure(let error):
+                    print("Error listening for typing updates: \(error)")
+                    
+                }
+            }
+        }
+    }
+    }
 
 
 
 struct ChatView: View {
-//    let conversation: Conversation = fakeConversation
+//    let conversation: Conversation
     let conversationId: String
     let userId: String
     let partnerId: String
-    
+
+    let partnerName: String
     @StateObject private var viewModel = ChatViewModel()
     
     @State private var newMessageContent = ""
@@ -115,14 +153,25 @@ struct ChatView: View {
         
     var body: some View {
         
-        VStack {
-            ChatViewHeader(menuState: $menuState, namespace: namespace, isChatViewPresented: $isChatViewPresented)
+        VStack {    
+            ChatViewHeader(name: partnerName, menuState: $menuState, namespace: namespace, isChatViewPresented: $isChatViewPresented)
             ScrollViewWithOnScrollChanged {
                 LazyVStack {
-                    Text("mes")
+//                    if viewModel.isUserTyping.values.contains(true) {
+//                        Text("Someone is typing...")
+//                            .transition(.opacity)
+//                            .animation(.easeInOut, value: viewModel.isUserTyping)
+//                    }
+
                     if !viewModel.messages.isEmpty {
                         ForEach(viewModel.messages) { message in
-                            MessageBubbleView(message: message.text, isScrolling: false, favorite: message.favorite, received: message.senderId != userId)
+                            MessageBubbleView(message: message.text, isScrolling: false, favorite: message.favorite, received: message.senderId != userId, onDoubleTap: {
+                                 if let messageID = message.id {
+                                    Task {
+                                        await viewModel.toggleFavorite(for: messageID, in: conversationId, isFavorite: message.favorite)
+                                    }
+                                }
+                            })
                                 .padding(.horizontal, 16)
                         }
                     }
@@ -131,13 +180,23 @@ struct ChatView: View {
                 isScrolling = false
             }
             
-            ChatInputField(placeholder: "Say hi...", newMessageBody: $newMessageBody, onEnterPressed: {
+            ChatInputField(placeholder: "Say hi...", newMessageBody: $newMessageBody,  onEnterPressed: {
                 // This closure is now correctly matching the expected type '(() -> Void)?'
                 Task {
                     // This Task now correctly encapsulates the asynchronous operation.
-                    try await viewModel.postNewMessage(conversationId: conversationId, userId: userId, text: newMessageBody)
+                    
+                    
+                    try await viewModel.postNewMessage(conversationId: conversationId, recipientId: partnerId, text: newMessageBody)
+                    
+                    
                     newMessageBody = "" // Reset the text field after sending the message.
                 }
+                
+                //            }, onTextChanged:  { newText in
+                //                Task {
+                //                    await viewModel.updateTypingStatus(conversationId: conversationId, userId: viewModel.user?.userId ?? "", isTyping: !newText.isEmpty)                }
+                //                
+                //            })
             })
             
             .padding(.bottom, 10)
@@ -146,7 +205,15 @@ struct ChatView: View {
             Task {
                
                 await viewModel.loadMessages(conversationId: conversationId, userId: userId)
+                viewModel.startTypingListener(conversationId: conversationId)
+                
             }
+        
+        }
+        .onDisappear {
+            
+            viewModel.messages = []
+            
         }
       }
     

@@ -13,12 +13,28 @@ let borderColor = Color(UIColor(red: 120/255, green: 120/255, blue: 120/255, alp
 
 struct CardSheet: View {
     @State private var isAnimating: Bool = false
+    
+    @StateObject private var viewModel = InboxViewModel()
+    
+    let item: CardFlowItem
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
-                CardRow(field1: "DAN", field2: "02523", place: "NEW YORK CITY")
-                CardRow(field1: "AYANO", field2: "02524", place: "TOKYO")
-                CardRow()
+                CardRow(field1: item.name, field2: item.name2, place: item.city)
+                CardRow(field1: "MUTUAL", field2: "CONTACT", place: "CHICAGO")
+                CardRow(field1: "", field2: "", place: "say hello")
+                    .onTapGesture {
+                        Task {
+                            do {
+                                let conversationId = try await  viewModel.createConversation(user2: item.userID)
+                                try await viewModel.postNewMessage(conversationId: conversationId, text: "hello")
+                            }
+                            
+                            catch {
+                                
+                            }
+                        }
+                    }
                 Spacer()
             }
             .padding()
@@ -27,7 +43,7 @@ struct CardSheet: View {
         }
     }
 }
-#Preview {
-    CardSheet()
-}
- 
+//#Preview {
+//    CardSheet()
+//}
+// 

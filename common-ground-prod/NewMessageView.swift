@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct NewMessageView: View {
-    @Environment(\.presentationMode) var presentationMode
-    var recipient: ConnectedUser // Assuming you're passing the recipient's user details
+    
+//    var recipient: ConnectedUser // Assuming you're passing the recipient's user details
     
     @State private var messageText: String = ""
     @State private var isSending: Bool = false
@@ -10,7 +10,7 @@ struct NewMessageView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text("Send a message to \(recipient.firstName ?? "User")")
+                Text("Send a message ..")
                     .font(.headline)
                     .padding()
                 
@@ -31,13 +31,13 @@ struct NewMessageView: View {
                 }
                 .disabled(isSending || messageText.isEmpty)
             }
-            .navigationBarTitle("New Message", displayMode: .inline)
-            .navigationBarItems(trailing: Button("Cancel") {
-                presentationMode.wrappedValue.dismiss()
-            })
         }
     }
     
     
+}
+
+#Preview {
+    NewMessageView()
 }
 
