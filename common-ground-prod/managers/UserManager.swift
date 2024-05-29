@@ -27,6 +27,19 @@ struct DBUser {
     let firstName: String?
     let surname: String?
     var city: String?
+    
+    static var mock: DBUser {
+        DBUser(
+            userId: "004052",
+            email: "mockuseremail@useremail.com",
+            phoneNumber: "555-555-4444",
+            photoUrl: nil,
+            dateCreated: nil,
+            firstName: "daniel",
+            surname: "crowley",
+            city: "NYC"
+        )
+    }
 }
 
 

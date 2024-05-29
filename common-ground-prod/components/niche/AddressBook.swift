@@ -48,6 +48,14 @@ struct ObservableScrollView<Content>: View where Content : View {
   }
 }
 
+struct AddressBookPrototype: View {
+    var body: some View {
+        SwipeToDismissView {
+            TestView()
+        }
+    }
+}
+
 struct TestView: View {
     
     @State private var userScrolledToBottom: Bool = false
@@ -102,6 +110,8 @@ struct TestView: View {
                   
                         
                         LazyVStack(spacing: 0) {
+                            
+                            
                             CardRow(field1: "NEW ", field2: "YORK CITY")
                             
                             CardRow(field1: "DAN", field2: "2525")
@@ -164,6 +174,8 @@ struct NewStruct: View {
             Spacer()
             ObservableScrollView(scrollOffset: $scrollOffset) { proxy in
                 LazyVStack {
+                    Image("downArrow")
+                        .frame(width: 30)
                     ForEach(0..<50) { index in
                         CardRow()
                     }
@@ -177,7 +189,7 @@ struct NewStruct: View {
 }
 
 #Preview {
-    NewStruct()
+    TestView2()
 }
 
 
@@ -232,3 +244,113 @@ struct CardRow: View {
 #Preview {
     TestView()
 }
+
+
+struct TestView2: View {
+    
+    @State private var userScrolledToBottom: Bool = false
+    var scrollOffset = CGFloat.zero
+    
+    // Function to calculate rotation based on scroll offset
+    func getRotation(scrollOffset: CGFloat, threshold: CGFloat, initialRotation: CGFloat) -> Angle {
+        if scrollOffset > threshold {
+            return Angle(degrees: initialRotation)
+        } else {
+            // Customize your formula as needed
+            return Angle(degrees: scrollOffset / 5)
+        }
+    }
+
+    // Function to calculate offset based on scroll offset
+    func getOffset(scrollOffset: CGFloat, threshold: CGFloat, initialOffset: CGFloat) -> CGFloat {
+        if scrollOffset > threshold {
+            return initialOffset
+        } else {
+            // Customize your formula as needed
+            return 0 - scrollOffset / 40
+        }
+    }
+    
+        var body: some View {
+        VStack(spacing: 0) {
+            
+           
+            Spacer()
+            
+            VStack(spacing: 0) {
+                 
+//                Rectangle()
+//                    .frame(maxWidth: .infinity, maxHeight: 2)
+//                    .padding(.bottom, 0)
+//                    .opacity(scrollOffset > 600 ? 0 : 1.0)
+                
+                ScrollView {
+                  
+                    
+                        LazyVStack(spacing: 0) {
+                            HStack(spacing: 2) {
+                                
+                                Text("COMMON")
+                                Spacer()
+                                Text("GROUND")
+                            }
+                            
+                            
+                            .opacity(scrollOffset > 500 ? 0 : 0.8)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            
+                            .padding(.bottom, 50)
+                            .padding(.horizontal, 28)
+                            
+                            CardRow(field1: "NEW ", field2: "YORK CITY")
+                            
+                            CardRow(field1: "DAN", field2: "2525")
+                            CardRow(field1: "ASTRO", field2: "9524")
+                            CardRow(field1: "NEW ", field2: "YORK CITY")
+                            CardRow(field1: "DAN", field2: "2525")
+                            CardRow(field1: "ASTRO", field2: "9524")
+                            CardRow(field1: "NEW ", field2: "YORK CITY")
+                            CardRow(field1: "DAN", field2: "2525")
+                            CardRow(field1: "ASTRO", field2: "9524")
+                            CardRow(field1: "DAN", field2: "2525")
+                            CardRow(field1: "ASTRO", field2: "9524")
+                            CardRow(field1: "NEW ", field2: "YORK CITY")
+                            CardRow(field1: "DAN", field2: "2525")
+                            CardRow(field1: "ASTRO", field2: "9524")
+                            CardRow(field1: "NEW ", field2: "YORK CITY")
+                            CardRow(field1: "DAN", field2: "2525")
+                            CardRow(field1: "ASTRO", field2: "9524")
+                                .padding(.bottom, 120)
+                            
+                            CardRow(field1: " ", field2: "COMMON", place: "GROUND")
+                            
+                            
+                                .padding(.bottom, 50)
+                            Color.clear
+                                .frame(width: 0, height: 0, alignment: .top)
+                                .onAppear {
+                                    userScrolledToBottom = true
+                                }
+                                .onDisappear {
+                                    userScrolledToBottom = false
+                                }
+                            
+                        
+                
+                            
+                        }
+                    }
+                }
+                .animation(.easeIn, value: userScrolledToBottom)
+                .animation(.easeIn, value: scrollOffset)
+                
+                
+//                .scrollTargetLayout()
+//                .scrollTargetBehavior(.paging)
+                
+            }
+        
+            .padding(.top, 50)
+        }
+     
+    }

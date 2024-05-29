@@ -44,6 +44,7 @@ struct HomeView: View {
     
     @State private var selectedSlice: String = " "
     @State private var isShowingSettings: Bool = false
+    @State private var isShowingPuzzle: Bool = false
     @State private var menuState: MenuState = .welcome
     @EnvironmentObject var navigationManager: NavigationManager
     @StateObject private var viewModel = HomeViewModel()
@@ -53,13 +54,14 @@ struct HomeView: View {
     var body: some View {
         
         ZStack {
-            RoundedRectangle(cornerRadius: 30) // Set your desired corner radius here
-                .stroke(borderColor.opacity(0.00), lineWidth: 2) // Set the color and line width of the border
-                .background(RoundedRectangle(cornerRadius: 25).fill(Color.white))
+//            RoundedRectangle(cornerRadius: 30) // Set your desired corner radius here
+//                .stroke(borderColor.opacity(0.00), lineWidth: 2) // Set the color and line width of the border
+//                .background(RoundedRectangle(cornerRadius: 25).fill(Color.white))
+//            
+////                .padding(.init(top: 70, leading: 12, bottom: 20, trailing: 12))
+//                .ignoresSafeArea()
             
-                .padding(.init(top: 70, leading: 12, bottom: 20, trailing: 12))
-                .ignoresSafeArea()
-        VStack {
+            VStack(spacing: 0) {
             switch menuState {
             case .welcome:
                 VStack(spacing:20) {
@@ -122,6 +124,12 @@ struct HomeView: View {
                                     }
                                 }
                             }
+                        Button(action: {
+                            isShowingPuzzle = true
+                        }, label: {
+                                Text("prototypes")
+                        })
+                        
                         }
                     }.foregroundStyle(.black)
                         .font(.system(size: 12, weight: .light, design: .rounded))
@@ -132,10 +140,15 @@ struct HomeView: View {
                 
             case .mapView:
                 MenuView(namespace: namespace, menuState: $menuState, selectedSlice: $selectedSlice)
+                    
                 
             case .mapDetail:
                 let imageName: String =  "map" + selectedSlice
                 MapDetailView(namespace: namespace, imageName: imageName , menuState: $menuState)
+                    .padding(0)
+                    
+                    
+                
                 
             case .profileView:
                 
@@ -144,10 +157,23 @@ struct HomeView: View {
                 InboxView2(menuState: $menuState, namespace: namespace)
             }
         }.animation(.smooth, value: menuState)
+                .offset(x: isShowingPuzzle ? -300 : 0)
+                
+            
+            PuzzlePieces(onBackPress: {
+                isShowingPuzzle.toggle()
+            })
+                .offset(x: isShowingPuzzle ? 0 : 300)
+        }.animation(.smooth, value: isShowingPuzzle)
+}
+}
+
+struct HomeView_Previews: PreviewProvider {
+    @State private static var menuState: MenuState = .mapView
+    @State private static var selectedSlice: String = "est"
+    @Namespace private static var namespace // Define the shared namespace
+    
+    static var previews: some View {
+        HomeView(namespace: namespace)
     }
 }
-}
-//
-//#Preview {
-//    SettingsView(showSignInView: .constant(false))
-//}

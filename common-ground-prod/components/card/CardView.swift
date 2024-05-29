@@ -15,7 +15,7 @@ struct CardView: View {
     
 
     
-    let item: CardFlowItem
+    let item: CardFlowItem 
     var isSelected: Bool
     var isAnyCardSelected: Bool
     
@@ -37,7 +37,10 @@ struct CardView: View {
                         VStack {
                             Text(item.name)
                             Text(item.name2)
-                            Text(item.city)
+                            Text(item.city.description)
+                            Text(item.hobbies.description)
+                            Text(item.ageRange)
+                            Text(item.industry)
                                 .foregroundColor(.black)
                         }
                         .font(.caption2)

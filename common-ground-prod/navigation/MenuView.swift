@@ -17,7 +17,6 @@ struct MenuView: View {
         VStack {
             HeaderView(namespace: namespace, squareSize: 50, menuState: $menuState)
             
-            
             MultiSliceView(namespace: namespace, isSelected: $selectedSlice)
             Spacer()
             if selectedSlice != " " {
@@ -29,11 +28,16 @@ struct MenuView: View {
                     .font(.system(size: 22, weight: .light))
                 Spacer()
             }
-        }.padding()
-
+        }
     }
 }
 
-//#Preview {
-//    MenuView()
-//}
+struct MenuView_Previews: PreviewProvider {
+    @State private static var menuState: MenuState = .mapView
+    @State private static var selectedSlice: String = "est"
+    @Namespace private static var namespace // Define the shared namespace
+    
+    static var previews: some View {
+        MenuView(namespace: namespace, menuState: $menuState, selectedSlice: $selectedSlice)
+    }
+}

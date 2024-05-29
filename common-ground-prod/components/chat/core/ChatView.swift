@@ -81,27 +81,27 @@ final class ChatViewModel: ObservableObject {
         }
     }
     
-    func updateTypingStatus(conversationId: String, userId: String, isTyping: Bool) async {
-            do {
-                try await ChatManager.shared.setUserTyping(conversationId: conversationId, userId: userId, isTyping: isTyping)
-            } catch {
-                print("Failed to update typing status: \(error)")
-            }
-        }
-
-    func startTypingListener(conversationId: String) {
-        ChatManager.shared.listenForTyping(conversationId: conversationId) { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let typingStatus):
-                    self?.isUserTyping = typingStatus
-                case .failure(let error):
-                    print("Error listening for typing updates: \(error)")
-                    
-                }
-            }
-        }
-    }
+                                                //    func updateTypingStatus(conversationId: String, userId: String, isTyping: Bool) async {
+                                                //            do {
+                                                //                try await ChatManager.shared.setUserTyping(conversationId: conversationId, userId: userId, isTyping: isTyping)
+                                                //            } catch {
+                                                //                print("Failed to update typing status: \(error)")
+                                                //            }
+                                                //        }
+                                                //
+                                                //    func startTypingListener(conversationId: String) {
+                                                //        ChatManager.shared.listenForTyping(conversationId: conversationId) { [weak self] result in
+                                                //            DispatchQueue.main.async {
+                                                //                switch result {
+                                                //                case .success(let typingStatus):
+                                                //                    self?.isUserTyping = typingStatus
+                                                //                case .failure(let error):
+                                                //                    print("Error listening for typing updates: \(error)")
+                                                //
+                                                //                }
+                                                //            }
+                                                //        }
+                                                //    }
     }
 
 
@@ -164,7 +164,7 @@ struct ChatView: View {
 //                    }
 
                     if !viewModel.messages.isEmpty {
-                        ForEach(viewModel.messages) { message in
+                        ForEach(viewModel.messages, id: \.self.id) { message in
                             MessageBubbleView(message: message.text, isScrolling: false, favorite: message.favorite, received: message.senderId != userId, onDoubleTap: {
                                  if let messageID = message.id {
                                     Task {
@@ -205,7 +205,7 @@ struct ChatView: View {
             Task {
                
                 await viewModel.loadMessages(conversationId: conversationId, userId: userId)
-                viewModel.startTypingListener(conversationId: conversationId)
+             
                 
             }
         

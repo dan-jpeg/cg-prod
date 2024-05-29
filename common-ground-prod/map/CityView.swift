@@ -1,108 +1,121 @@
-    //
-    //  CityView.swift
-    //  common-ground-prod
-    //
-    //  Created by dan crowley on 4/22/24.
-    //
-
 import SwiftUI
 import SwiftfulUI
+
 
 struct CityConnectionView: View {
     let cityName: String
     let countryCode: String
-    let fraction: (numerator: Int, denominator: Int) // A tuple representing the fraction
-
-    var ratio: CGFloat { // Computed property to get the ratio
+    let fraction: (numerator: Int, denominator: Int)
+    var rotated: Bool = false
+    
+    var ratio: CGFloat {
         CGFloat(fraction.numerator) / CGFloat(fraction.denominator)
     }
 
-    @Binding var showNumbers: Bool
+    var showNumbers: Bool = true
 
     var body: some View {
-        
-                
-                GeometryReader { geometry in
-                    HStack(spacing: 0) {
-                        VStack(alignment: .leading, spacing: 0) {
+        GeometryReader { geometry in
+            HStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 0) {
                     VStack {
                         Circle()
                             .frame(width: 10, height: 10)
-                            .position(x: geometry.size.width-6.5 , y: geometry.size.height * (1 - ratio))
+                            .position(x: geometry.size.width - 6.5, y: geometry.size.height * (1 - ratio))
+                            .opacity(rotated ? 0 : 0.8)
 
                         if showNumbers {
-                            // Display the fraction instead of ratio.description
                             Text("\(fraction.numerator)/\(fraction.denominator)")
                                 .font(.system(size: 11, weight: .medium, design: .monospaced))
                                 .position(x: geometry.size.width / 2 + 10, y: geometry.size.height * (1 - ratio) - 150)
+                                .rotationEffect(Angle(degrees: rotated ? -90 : 0))
+                                .offset(x: rotated ? 100 : 0)
                         }
                     }
-                    
                     VStack(alignment: .leading, spacing: 0) {
                         Text(cityName)
                             .font(.system(size: 11, weight: .medium, design: .monospaced))
                             .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            
                         Text(countryCode)
                             .font(.system(size: 9, weight: .light, design: .monospaced))
                             .padding(.top, 1)
                             .padding(.trailing, 3)
                             .frame(maxWidth: .infinity, alignment: .trailing)
+                            
                     }
+                    .opacity(rotated ? 0 : 0.8)
+                }
+                
+            }
+            .overlay(alignment: rotated ? .leading : .trailing) {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.52))
+                    .frame(width: 2)
+                    .offset(y: rotated ? 100 : 0)
                     
-                }
-                
-                
-                }
-                    .overlay(alignment: .trailing) {
-                    Rectangle()
-                        .fill(.gray.opacity(0.52))
-                        .frame(width: 1)
-                       
-                        
-                }
-               
-
-               
+                    
+            }
         }
-                .frame(minWidth: 80, maxWidth: 2)
-                
+        .frame(minWidth: 80, maxWidth: 200)
         .padding(.horizontal)
     }
 }
 
-struct ParentView: View {
-    @State var showNumbers: Bool = false
-    let cities: [(name: String, code: String, fraction: (Int, Int))] = [
-        ("New York", "US", (9, 12)),
-        ("Chicago", "US", (5, 15)),
-        ("London", "UK", (2, 12)),
-        ("Paris", "FR", (5, 30)),
-        ("Miami", "US", (18, 22)),
-        ("New York City", "US", (12, 24)),
-        ("Chicago", "US", (7, 10)),
-        ("London", "UK", (1, 5)),
-        ("Paris", "FR", (22, 25)),
-        ("Miami", "US", (11, 25))
-    ]
+struct CitySectionScrollable: View {
     
+    var rotated: Bool = false
+    @Binding var scrollPosition: Int? 
+    
+    var cities: [City] = []
+
+  
+
+    @State private var originState: String = ""
+
     var body: some View {
-        ScrollView(.horizontal) {
-            HStack(alignment: .center, spacing: 8) {
-                ForEach(cities, id: \.name) { city in
-                    CityConnectionView(cityName: city.name, countryCode: city.code, fraction: city.fraction, showNumbers: Binding.constant(true))
-                        
-                        
+        ScrollView(.horizontal, showsIndicators: false) {
+            LazyHStack(spacing: 0) {
+                ForEach(cities) { city in
+                    ZStack {
+                        CityConnectionView(cityName: city.name, countryCode: "US", fraction: (city.revealedConnections, city.totalConnections), rotated: rotated)
+                            .padding()
+                            
+                        if let pos = scrollPosition {
+                            Text(pos.description)
+                                .opacity(0)
+                            Text(cities[pos].name)
+                                .opacity(rotated ? 0.8 : 0)
+                                .rotationEffect(.degrees(270))
+                                .offset(x: -100, y: 0)
+                        }
+                            
+                    }
+                    .id(city.id)
+                    .containerRelativeFrame(.horizontal)
                 }
             }
         }
+        
         .scrollIndicators(.hidden)
         .frame(height: 340)
         .padding(.horizontal, 20)
+        .scrollPosition(id: $scrollPosition)
+        .scrollTargetLayout()
+        .ignoresSafeArea(.all)
+        .scrollTargetBehavior(.paging)
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct CityView_Previews: PreviewProvider {
+    @Namespace static var namespace  // Declare a static namespace for the preview
+
     static var previews: some View {
-        ParentView()
+        MapDetailView(namespace: namespace, imageName: "mapEST", menuState: .constant(.mapDetail))
+            .previewLayout(.sizeThatFits)
+            
     }
 }
+
+

@@ -1,12 +1,3 @@
-//
-//  CardFlowView.swift
-//  common-ground
-//
-//  Created by dan crowley on 2/27/24.
-//
-
-
-
 import SwiftUI
 
 struct CardFlowView<Content: View, Item: RandomAccessCollection>: View where Item.Element: Identifiable {
@@ -16,10 +7,8 @@ struct CardFlowView<Content: View, Item: RandomAccessCollection>: View where Ite
     var rotation: Double
     var content: (Item.Element) -> Content
     
-    @State private var stack : [String] = []
+    @State private var stack: [String] = []
     
-    
-
     var body: some View {
         GeometryReader { geometry in
             ScrollView(.horizontal) {
@@ -61,32 +50,41 @@ struct CardFlowView<Content: View, Item: RandomAccessCollection>: View where Ite
         let degree = cappedProgress * (cappedRotation * 2)
         
         return cappedRotation - degree
-    }}
+    }
+}
 
 struct CardFlowItem: Identifiable, Equatable {
     let id: UUID = .init()
     var name: String
     var name2: String
-    var city: String
+    var city: Int
     var userID: String
+    var ageRange: String
+    var industry: String
+    var hobbies: [String]
     
-    init(name: String, name2: String, city: String, userID: String) {
+    init(name: String, name2: String, city: Int, userID: String, ageRange: String, industry: String, hobbies: [String]) {
         self.name = name
         self.name2 = name2
         self.city = city
         self.userID = userID
+        self.ageRange = ageRange
+        self.industry = industry
+        self.hobbies = hobbies
     }
     
     init(connectedUser: ConnectedUser) {
         self.name = connectedUser.firstName ?? ""
         self.name2 = connectedUser.surname ?? ""
-        self.city = connectedUser.city ?? ""
+        self.city = connectedUser.city ?? 1
         self.userID = connectedUser.id
+        self.ageRange = connectedUser.ageRange ?? ""
+        self.industry = connectedUser.industry ?? ""
+        self.hobbies = connectedUser.hobbies ?? ["hobby1", "hobby2"]
     }
     
     static var mock: CardFlowItem {
-        
-        CardFlowItem(name: "dan", name2: "crowley", city: "nyc", userID: "12345")
+        CardFlowItem(name: "dan", name2: "crowley", city: 1, userID: "12345", ageRange: "25-34", industry: "tech", hobbies: ["climbing", "hiking"])
     }
 }
 

@@ -137,11 +137,20 @@ final class ConnectionManager {
         print("hello")
         let firstName = data["first_name"] as? String
         let surname = data["surname"] as? String
-        let city = data["city"] as? String
+//        let city = data["city"] as? String
+        let cities = [1, 2, 3, 4, 5]
+        let industries = ["finance", "real estate", "tech", "service", "design", "art"]
+        let hobbies = ["climbing", "hiking", "crypto", "music", "clubbing", "racket", "art"]
+//wandom industry out of finance, real estate, tech, service, design, or art
+        let ageRange: String = "25-34" //
         
-    
+        let randomCity = cities.randomElement() ?? 1
+        let randomIndustry = industries.randomElement() ?? "industry"
+        let randomHobbies = hobbies.shuffled().prefix(2).map { $0 }
         
-        return ConnectedUser(id: userId, firstName: firstName, surname: surname, city: city)
+        
+        
+        return ConnectedUser(id: userId, firstName: firstName, surname: surname, city: randomCity, industry: randomIndustry, ageRange: ageRange, hobbies: randomHobbies)
     }
 }
 
@@ -149,6 +158,32 @@ struct ConnectedUser: Identifiable {
     let id: String
     let firstName: String?
     let surname: String?
-    let city: String?
-}
+    let city: Int?
+    let industry: String?
+    let ageRange: String?
+    let hobbies: [String]?
+    
+    static let mockData: [ConnectedUser] = [
+           ConnectedUser(id: "1", firstName: "Alice", surname: "Smith", city: 1, industry: "tech", ageRange: "25-34", hobbies: ["climbing", "hiking"]),
+           ConnectedUser(id: "2", firstName: "Jinni", surname: "Xu", city: 2, industry: "design", ageRange: "35-44", hobbies: ["crypto", "music"]),
+           ConnectedUser(id: "3", firstName: "Case", surname: "Resor", city: 3, industry: "service", ageRange: "18-24", hobbies: ["clubbing", "racket sports"]),
+           ConnectedUser(id: "4", firstName: "Daniel", surname: "Crowley", city: 4, industry: "tech", ageRange: "45-54", hobbies: ["art", "hiking"]),
+           ConnectedUser(id: "5", firstName: "Mike", surname: "Stuzzi", city: 5, industry: "management", ageRange: "55+", hobbies: ["music", "climbing"]),
+           ConnectedUser(id: "6", firstName: "Sarah", surname: "Johnson", city: 1, industry: "finance", ageRange: "25-34", hobbies: ["yoga", "cooking"]),
+           ConnectedUser(id: "7", firstName: "Tom", surname: "Henderson", city: 2, industry: "real estate", ageRange: "35-44", hobbies: ["cycling", "reading"]),
+           ConnectedUser(id: "8", firstName: "Emily", surname: "Davis", city: 3, industry: "tech", ageRange: "18-24", hobbies: ["gaming", "writing"]),
+           ConnectedUser(id: "9", firstName: "Michael", surname: "Brown", city: 4, industry: "service", ageRange: "45-54", hobbies: ["photography", "gardening"]),
+           ConnectedUser(id: "10", firstName: "Jessica", surname: "Williams", city: 5, industry: "design", ageRange: "55+", hobbies: ["traveling", "painting"]),
+           ConnectedUser(id: "11", firstName: "David", surname: "Taylor", city: 1, industry: "art", ageRange: "25-34", hobbies: ["sculpting", "pottery"]),
+           ConnectedUser(id: "12", firstName: "Laura", surname: "Martinez", city: 2, industry: "tech", ageRange: "35-44", hobbies: ["knitting", "baking"]),
+           ConnectedUser(id: "13", firstName: "James", surname: "Anderson", city: 3, industry: "real estate", ageRange: "18-24", hobbies: ["swimming", "running"]),
+           ConnectedUser(id: "14", firstName: "Linda", surname: "Thomas", city: 4, industry: "finance", ageRange: "45-54", hobbies: ["bird watching", "puzzle solving"]),
+           ConnectedUser(id: "15", firstName: "Robert", surname: "Jackson", city: 5, industry: "service", ageRange: "55+", hobbies: ["fishing", "woodworking"]),
+           ConnectedUser(id: "16", firstName: "Karen", surname: "Lee", city: 1, industry: "tech", ageRange: "25-34", hobbies: ["hiking", "drawing"]),
+           ConnectedUser(id: "17", firstName: "Steven", surname: "Harris", city: 2, industry: "design", ageRange: "35-44", hobbies: ["coding", "board games"]),
+           ConnectedUser(id: "18", firstName: "Susan", surname: "Clark", city: 3, industry: "art", ageRange: "18-24", hobbies: ["sewing", "crafting"]),
+           ConnectedUser(id: "19", firstName: "Christopher", surname: "Lewis", city: 4, industry: "real estate", ageRange: "45-54", hobbies: ["skiing", "kayaking"]),
+           ConnectedUser(id: "20", firstName: "Patricia", surname: "Robinson", city: 5, industry: "finance", ageRange: "55+", hobbies: ["gardening", "wine tasting"])
+       ]
+   }
 

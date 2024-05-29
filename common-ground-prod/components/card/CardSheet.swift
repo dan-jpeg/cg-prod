@@ -20,7 +20,7 @@ struct CardSheet: View {
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
-                CardRow(field1: item.name, field2: item.name2, place: item.city)
+                CardRow(field1: item.name, field2: item.name2, place: item.city.description)
                 CardRow(field1: "MUTUAL", field2: "CONTACT", place: "CHICAGO")
                 CardRow(field1: "", field2: "", place: "say hello")
                     .onTapGesture {
