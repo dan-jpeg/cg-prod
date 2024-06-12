@@ -51,6 +51,8 @@ final class UserManager {
     
     
     
+    
+    
     func createNewUser(auth: AuthDataResultModel) async throws {
         
         var userData: [String:Any] = [

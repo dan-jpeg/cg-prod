@@ -46,9 +46,20 @@ struct ArrowScrollView: View {
                             .resizable()
                             .frame(width: UIScreen.main.bounds.width-80, height: UIScreen.main.bounds.height/1.8)
                             .padding(.vertical, 48)
-                            .padding(.bottom, 174)
+                            .padding(.bottom, 220)
                             .opacity(0.8)
-                        TestView2(scrollOffset: scrollOffset)
+                        HStack {
+                            Text("common")
+                            Spacer()
+                            Text("ground")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, 36)
+                        .padding(.bottom, UIScreen.main.bounds.height/2)
+                        
+                        
+                        
+                        TestView()
                             
                         
                     }

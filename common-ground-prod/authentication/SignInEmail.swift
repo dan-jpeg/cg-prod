@@ -7,47 +7,16 @@
 
 import SwiftUI
 
-@MainActor
-final class SignInEmailViewModel: ObservableObject {
-    @Published var email = ""
-    @Published var password = ""
-    @Published var authID = ""
-    
-    func signUp() async throws  {
-        guard !email.isEmpty, !password.isEmpty else {
-            print("no email")
-            return
-        }
-        let authDataResult = try await AuthenticationManager.shared.createUser(email: email, password: password)
-        try await UserManager.shared.createNewUser(auth: authDataResult)
-        
-    }
-    
-    func signIn() async throws {
-        guard !email.isEmpty, !password.isEmpty else {
-            print("no email / pw found")
-            return
-        }
-        
-        let authDataResult = try await AuthenticationManager.shared.signInUser(email: email, password: password)
-        try await UserManager.shared.createNewUser(auth: authDataResult)
-       
-    }
-}
 
 
 
 struct SignInEmailView: View {
-    
     var namespace: Namespace.ID
-   
     @State private var signUpView: Bool = false
-    
     @State private var isOnboarding: Bool = false
-    
     @StateObject private var viewModel = SignInEmailViewModel()
-    
     @EnvironmentObject var navigationManager: NavigationManager
+    
     
     var body: some View {
         VStack {
@@ -60,15 +29,16 @@ struct SignInEmailView: View {
             
                 
                 VStack {
-                    CustomTextField(icon: "none", placeHolder: "EM", text: $viewModel.email, isSecure: false)
+                    CustomTextField(label: "none", placeHolder: "EM", text: $viewModel.email, isSecure: false)
                         .textInputAutocapitalization(.never)
                         .padding()
                     
                     Divider()
-                    CustomTextField(icon: "none", placeHolder: "PW", text: $viewModel.password, isSecure: true)
+                    CustomTextField(label: "none", placeHolder: "PW", text: $viewModel.password, isSecure: true)
                         
                         
                 }
+                
                 HStack {
                     Spacer()
                     HStack(alignment: .center) {
@@ -85,21 +55,10 @@ struct SignInEmailView: View {
                             .onTapGesture {
                                 Task {
                                     do {
-                                        try await viewModel.signUp()
-                                        isOnboarding = true
-                                       
-                                        return
+                                        try await signUpSequence()
                                     } catch {
                                         print(error)
                                     }
-                                    
-//                                    do {
-//                                        try await viewModel.signIn()
-//                                        viewState = .authenticated
-//                                        return
-//                                    } catch {
-//                                        print(error)
-//                                    }
                                 }
                             }
                         } else {
@@ -107,24 +66,17 @@ struct SignInEmailView: View {
                             Text(signUpView ? "SIGN UP" : "SIGN UP?")
                                 .matchedGeometryEffect(id: "signIn", in: namespace)
                                 .opacity(0.2)
-                                .onTapGesture {
-                                    signUpView.toggle()
-                                }
+                                    .onTapGesture {
+                                        signUpView.toggle()
+                                    }
                            Spacer()
                             Text(signUpView ? "SIGN IN?" : "SIGN IN")
                                 .matchedGeometryEffect(id: "signUp", in: namespace)
                                 .onTapGesture {
                                     Task {
-//                                        do {
-//                                            try await viewModel.signUp()
-//                                            viewState = .authenticated
-//                                            return
-//                                        } catch {
-//                                            print(error)
-//                                        }
-                                        
                                         do {
                                             try await viewModel.signIn()
+                                            print("in sign in")
                                             navigationManager.appState = .authenticated
                                             return
                                         } catch {
@@ -152,5 +104,37 @@ struct SignInEmailView: View {
         .padding(.horizontal, 40)
     }
     
+    private func signUpSequence() async throws {
+        
+        
+            try await viewModel.signUp()
+        
+        isOnboarding = true
+        return
+    }
+    
 }
+
+struct signupButtons: View {
+    var body: some View {
+        HStack {
+            Text("Welcome back.")
+            
+            Text("")
+            
+        }
+        .frame(maxWidth: .infinity)
+    }
+}
+
+
+struct SignInEmail_Previews: PreviewProvider {
+
+    @Namespace private static var namespace // Define the shared namespace
+    
+    static var previews: some View {
+        SignInEmailView(namespace: namespace)
+    }
+}
+
 

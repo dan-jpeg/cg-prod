@@ -15,7 +15,7 @@ struct ScrollViewProfile2: View {
     @State private var viewState: editSection = .notEditing
     @State private var phoneNumber: String = "PHONE"
     @State private var altPhoneNumber: String = "ALTPHONE"
-    @State private var hometown: String = "chicago"
+    @State private var hometown: String = "MIAMI"
     
     var user: DBUser = .mock
     
@@ -64,15 +64,16 @@ struct ScrollViewProfile2: View {
                                     }
                                     Text(hometown)
                                         .rotationEffect(.degrees(90))
-                                        .offset(x: 20, y: 40)
+                                        .offset(x: 20, y: 30)
+                                        .textCase(.lowercase)
                                 }
                                 
                                 .rotationEffect(.degrees(viewState == .hometown ? -90 : 0))
-                                .opacity(viewState == .hometown ? 0.8 : 0.0)
+                                .opacity(viewState == .hometown ? 0.9 : 0.8)
                                 .font(.system(size: 11))
                                 .offset(x: 25, y: -95)
-                                .scaleEffect(viewState == .hometown ? 1.3 : 1.0) // Adjust scale as needed
-                                .offset(viewState == .hometown ? CGSize(width: -150, height: 50) : .zero) // Adjust offset as needed
+                                .scaleEffect(viewState == .hometown ? 1.4 : 1.0) // Adjust scale as needed
+                                .offset(viewState == .hometown ? CGSize(width: -150, height: 120) : .zero) // Adjust offset as needed
                                 
                                 
                             }
@@ -190,7 +191,7 @@ struct ScrollViewProfile2: View {
         .textCase(.uppercase)
         .font(.system(size: 11))
         .scaleEffect(viewState == .phoneNumber ? 1.2 : 1.0) // Adjust scale as needed
-        .offset(viewState == .phoneNumber ? CGSize(width: 60, height: -10) : .zero) // Adjust offset as needed
+        .offset(viewState == .phoneNumber ? CGSize(width: 60, height: -10) : .zero)
         .animation(.smooth(duration: 0.33), value: viewState) // Adjust animation as needed
     }
 }

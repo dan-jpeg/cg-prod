@@ -39,7 +39,7 @@ struct RootView: View {
                 TapAnyWhereView(namespace: namespace)
                     .environmentObject(navigationManager)
             case .notAuthenticated:
-                SignInEmailView(namespace: namespace)
+                ArrowLogin()
                     .environmentObject(navigationManager)
             case .authenticated:
                 // Navigate to the authenticated part of your app

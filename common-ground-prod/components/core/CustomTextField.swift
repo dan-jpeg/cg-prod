@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct CustomTextField: View {
-    let icon: String
+    let label: String
     let placeHolder: String
     @Binding var text: String
     let isSecure: Bool
     
+    
     @State private var width = CGFloat.zero
     @State private var labelWidth = CGFloat.zero
-    
+   
     
     var body: some View {
            HStack {
@@ -23,16 +24,15 @@ struct CustomTextField: View {
                    if isSecure {
                        SecureField(placeHolder, text: $text)
                            .foregroundColor(.black)
-                           .font(.system(.title, design: .monospaced, weight: .bold))
+                           .font(.system(.subheadline, design: .monospaced, weight: .bold))
                            .padding(EdgeInsets(top: 15, leading: 60, bottom: 15, trailing: 60))
                    } else {
                        TextField(placeHolder, text: $text)
                            .foregroundColor(.black)
-                           .font(.system(.title, design: .monospaced, weight: .bold))
+                           .font(.system(.subheadline, design: .monospaced, weight: .bold))
                            .padding(EdgeInsets(top: 15, leading: 60, bottom: 15, trailing: 60))
                    }
                }
-
                    .overlay {
                        GeometryReader { geo in
                            Color.clear.onAppear {
@@ -53,16 +53,12 @@ struct CustomTextField: View {
                    
                    HStack {
                        Spacer()
-                   BoxView(size: 20, offset: -10)
+                   BoxView(size: 2, offset: -10)
                            .offset(y: 12)
                    }
                    .frame(maxWidth: .infinity)
                    .padding(9)
-                   
-                   
-                   
-                   Text(placeHolder)
-                       .foregroundColor(.black)
+                   CircleFillText(text: label, fill: false)
                        .overlay {
                            GeometryReader { geo in
                                Color.clear.onAppear {
@@ -74,15 +70,17 @@ struct CustomTextField: View {
                        .font(.system(size: 20, weight: .light, design: .monospaced))
                        .textCase(.uppercase)
                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                       .offset(x: 0, y: -40)
+                       .offset(x: 0, y: -30 )
                }
            }.padding()
            }
    }
 
-//#Preview {
-//    CustomTextField(icon: "person", placeHolder: "name", text: .constant(""))
-//}
+
+
+#Preview {
+    CustomTextField(label: "EMAIL", placeHolder: "name", text: .constant(""), isSecure: false)
+}
 
 
 

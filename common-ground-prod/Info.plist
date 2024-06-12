@@ -9,6 +9,11 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>KHTekaTRIAL-Regular.otf</string>
+		<string>KHTekaTRIAL-RegularItalic.otf</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

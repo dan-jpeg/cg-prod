@@ -290,11 +290,12 @@ struct PreviewBanner: View {
 }
 struct CircleFillText: View {
     
+    var spacing: CGFloat = 0
     
     var text: String = "card preview"
     var fill: Bool = false
     var body: some View {
-        HStack(spacing: 0) {
+        HStack(spacing: spacing) {
             ForEach(Array(text.lowercased().enumerated()), id: \.offset) { index, letter in
                 if fill {
                     Image(systemName: "\(letter).circle.fill")

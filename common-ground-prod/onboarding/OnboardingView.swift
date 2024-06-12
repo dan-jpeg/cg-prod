@@ -142,8 +142,8 @@ struct OnboardingView: View {
                 case .name:
                     
                     VStack(spacing: 20) {
-                        CustomTextField(icon: "person", placeHolder: "FIRST NAME", text: $viewModel.firstName, isSecure: false)
-                        CustomTextField(icon: "person", placeHolder: "LAST NAME", text: $viewModel.surname, isSecure: false)
+                        CustomTextField(label: "person", placeHolder: "FIRST NAME", text: $viewModel.firstName, isSecure: false)
+                        CustomTextField(label: "person", placeHolder: "LAST NAME", text: $viewModel.surname, isSecure: false)
                         
                         Text("->")
                             .asButton {
@@ -160,7 +160,7 @@ struct OnboardingView: View {
                     
                 case .dateOfBirth:
                     VStack {
-                        CustomTextField(icon: "person", placeHolder: "WHAT YEAR WERE YOU BORN?", text: $viewModel.dateOfBirth, isSecure: false)
+                        CustomTextField(label: "person", placeHolder: "WHAT YEAR WERE YOU BORN?", text: $viewModel.dateOfBirth, isSecure: false)
                         
                         Text("->")
                             .asButton {
@@ -177,7 +177,7 @@ struct OnboardingView: View {
                     
                 case .phoneNumber:
                     VStack {
-                        CustomTextField(icon: "phone", placeHolder: "CAN WE HAVE YOUR NUMBER?", text: $viewModel.phoneNumber, isSecure: false)
+                        CustomTextField(label: "phone", placeHolder: "CAN WE HAVE YOUR NUMBER?", text: $viewModel.phoneNumber, isSecure: false)
                         Text("->")
                             .asButton {
                                 if viewModel.isPhoneNumberValid {
@@ -190,7 +190,7 @@ struct OnboardingView: View {
                     }
                 case .city:
                     VStack {
-                        CustomTextField(icon: "phone", placeHolder: "CITY", text: $viewModel.city, isSecure: false)
+                        CustomTextField(label: "phone", placeHolder: "CITY", text: $viewModel.city, isSecure: false)
                         Button("go") {
                             Task {
                                 do {

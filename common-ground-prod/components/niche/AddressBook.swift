@@ -189,7 +189,7 @@ struct NewStruct: View {
 }
 
 #Preview {
-    TestView2()
+    TestView4()
 }
 
 
@@ -241,9 +241,14 @@ struct CardRow: View {
     
 }
 
+//#Preview {
+//    TestView()
+//}
+
 #Preview {
-    TestView()
+    TestView3()
 }
+
 
 
 struct TestView2: View {
@@ -354,3 +359,220 @@ struct TestView2: View {
         }
      
     }
+
+struct TestView3: View {
+    
+    @State private var userScrolledToBottom: Bool = false
+    var scrollOffset = CGFloat.zero
+    
+    // Function to calculate rotation based on scroll offset
+    func getRotation(scrollOffset: CGFloat, threshold: CGFloat, initialRotation: CGFloat) -> Angle {
+        if scrollOffset > threshold {
+            return Angle(degrees: initialRotation)
+        } else {
+            // Customize your formula as needed
+            return Angle(degrees: scrollOffset / 5)
+        }
+    }
+
+    // Function to calculate offset based on scroll offset
+    func getOffset(scrollOffset: CGFloat, threshold: CGFloat, initialOffset: CGFloat) -> CGFloat {
+        if scrollOffset > threshold {
+            return initialOffset
+        } else {
+            // Customize your formula as needed
+            return 0 - scrollOffset / 40
+        }
+    }
+    
+        var body: some View {
+        VStack(spacing: 0) {
+            
+           
+            Spacer()
+            
+            VStack(spacing: 0) {
+                 
+//                Rectangle()
+//                    .frame(maxWidth: .infinity, maxHeight: 2)
+//                    .padding(.bottom, 0)
+//                    .opacity(scrollOffset > 600 ? 0 : 1.0)
+                
+                ScrollView {
+                  
+                    
+                        LazyVStack(spacing: 0) {
+                            HStack(spacing: 2) {
+                                
+                                Text("COMMON")
+                                Spacer()
+                                Text("GROUND")
+                            }
+                            
+                            
+                            .opacity(scrollOffset > 500 ? 0 : 0.8)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            
+                            .padding(.bottom, 50)
+                            .padding(.horizontal, 28)
+                            
+                            CardRow(field1: " ", field2: "_", place: "")
+                            CardRow(field1: " ", field2: "_", place: "")
+                            CardRow(field1: " ", field2: "_", place: "")
+                            CardRow(field1: " ", field2: "_", place: "")
+                            CardRow(field1: " ", field2: "_", place: "")
+                            CardRow(field1: " ", field2: "_", place: "")
+                            CardRow(field1: " ", field2: "_", place: "")
+                            CardRow(field1: " ", field2: "_", place: "")
+                            
+                            
+                            
+                            
+                            CardRow(field1: "____ ", field2: "_______")
+                 
+                                .padding(.bottom, 120)
+                            
+                            CardRow(field1: " ", field2: "COMMON", place: "GROUND")
+                            
+                            
+                                .padding(.bottom, 50)
+                            Color.clear
+                                .frame(width: 0, height: 0, alignment: .top)
+                                .onAppear {
+                                    userScrolledToBottom = true
+                                }
+                                .onDisappear {
+                                    userScrolledToBottom = false
+                                }
+                            
+                        
+                
+                            
+                        }
+                    }
+                }
+                .animation(.easeIn, value: userScrolledToBottom)
+                .animation(.easeIn, value: scrollOffset)
+                
+                
+//                .scrollTargetLayout()
+//                .scrollTargetBehavior(.paging)
+                
+            }
+        
+            .padding(.top, 50)
+        }
+     
+    }
+
+
+struct TestView4: View {
+    
+    @State private var userScrolledToBottom: Bool = false
+    @State private var scrollOffset = CGFloat.zero
+    
+    // Function to calculate rotation based on scroll offset
+    func getRotation(scrollOffset: CGFloat, threshold: CGFloat, initialRotation: CGFloat) -> Angle {
+        if scrollOffset > threshold {
+            return Angle(degrees: initialRotation)
+        } else {
+            // Customize your formula as needed
+            return Angle(degrees: scrollOffset / 5)
+        }
+    }
+
+    // Function to calculate offset based on scroll offset
+    func getOffset(scrollOffset: CGFloat, threshold: CGFloat, initialOffset: CGFloat) -> CGFloat {
+        if scrollOffset > threshold {
+            return initialOffset
+        } else {
+            // Customize your formula as needed
+            return 0 - scrollOffset / 40
+        }
+    }
+    
+        var body: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Spacer()
+                BoxView(size: 20, offset: getOffset(scrollOffset: scrollOffset, threshold: 666, initialOffset: 2.2))
+                                    .rotationEffect(getRotation(scrollOffset: scrollOffset, threshold: 500, initialRotation: 0))
+            }
+           
+            Spacer()
+            
+            VStack(spacing: 0) {
+                HStack {
+                   
+                    BoxView(size: 80, offset: getOffset(scrollOffset: scrollOffset, threshold: 666, initialOffset: 2.2))
+                                        .rotationEffect(getRotation(scrollOffset: scrollOffset, threshold: 666, initialRotation: 0))
+
+                        
+                    
+                }
+                 
+                Rectangle()
+                    .frame(maxWidth: .infinity, maxHeight: 2)
+                    .padding(.bottom, 0)
+                    .opacity(scrollOffset > 600 ? 0 : 1.0)
+                
+                ObservableScrollView(scrollOffset: $scrollOffset) { proxy in
+                  
+                        
+                        LazyVStack(spacing: 0) {
+                            
+                            
+                            CardRow(field1: " ", field2: "_", place: "")
+                            CardRow(field1: " ", field2: "_")
+                            CardRow(field1: " ", field2: "_")
+                            CardRow(field1: "", field2: "_")
+                            CardRow(field1: " ", field2: "_", place: "")
+                            CardRow(field1: " ", field2: "_", place: "")
+                            CardRow(field1: " ", field2: "_", place: "")
+                            CardRow(field1: " ", field2: "_", place: "chi")
+                            CardRow(field1: " ", field2: "nyc", place: "")
+                            CardRow(field1: " ", field2: " _", place: "")
+                            CardRow(field1: "", field2: "___", place: "w")
+                            CardRow(field1: " ", field2: "_", place: "nyc")
+                            CardRow(field1: " ", field2: "", place: "w")
+                            CardRow(field1: " ", field2: "____", place: "____")
+                            CardRow(field1: " ", field2: "", place: "w")
+                            CardRow(field1: " ", field2: "_", place: "w")
+                            CardRow(field1: "PLACE ", field2: "", place: "PLACE")
+                            CardRow(field1: " ", field2: "_", place: "nyc")
+                            CardRow(field1: " ", field2: "_", place: "w")
+                                .padding(.bottom, 120)
+                            
+                            CardRow(field1: " ", field2: "COMMON", place: "GROUND")
+                            
+                            
+                                .padding(.bottom, 50)
+                            Color.clear
+                                .frame(width: 0, height: 0, alignment: .top)
+                                .onAppear {
+                                    userScrolledToBottom = true
+                                }
+                                .onDisappear {
+                                    userScrolledToBottom = false
+                                }
+                            
+                        
+                
+                            
+                        }
+                    }
+                }
+                .animation(.easeIn, value: userScrolledToBottom)
+                
+                
+//                .scrollTargetLayout()
+//                .scrollTargetBehavior(.paging)
+                
+            }
+        
+            .padding(.top, 50)
+        }
+     
+    }
+
+

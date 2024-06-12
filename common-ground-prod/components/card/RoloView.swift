@@ -206,7 +206,7 @@ struct RoloView: View {
                 case .shown:
                     
                     VStack(spacing: 2) {
-                        CustomTextField(icon: "none", placeHolder: "userID:", text: $rolodexState.connectionId, isSecure: false)
+                        CustomTextField(label: "none", placeHolder: "userID:", text: $rolodexState.connectionId, isSecure: false)
                         Image(systemName: "plus.square.dashed")
                             .onTapGesture {
                                 Task {

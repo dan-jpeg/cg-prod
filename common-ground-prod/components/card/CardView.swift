@@ -68,12 +68,9 @@ struct CardView: View {
                     Text("msg sent!")
 
                 }
-            }
-                            
+            } 
         }
-       
-
-            
+        
 //            .sheet(isPresented: $showCardSheet) {
 //                CardSheet(item: item)
 //                    .presentationDetents([.fraction(6.1/10), .large])
@@ -81,12 +78,10 @@ struct CardView: View {
 //            }
 //        
     }
-    
     func opacityBasedOnSelection() -> Double {
            guard let selectedCard = rolodexState.selectedCard else {
                return 0.01 // No card is selected, normal opacity
            }
-           
            return item == selectedCard ? 0 : 0.0 // Reduce opacity if not the selected card
        }
 }

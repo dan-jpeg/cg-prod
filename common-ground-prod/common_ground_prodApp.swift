@@ -21,6 +21,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Set up the Messaging delegate
         Messaging.messaging().delegate = self
         
+        
+                for family in UIFont.familyNames {
+                    print("Family: \(family)")
+                    for name in UIFont.fontNames(forFamilyName: family) {
+                        print("   - \(name)")
+                    }
+                }
+            
+        
         // Set up notification center delegate and request permission
         UNUserNotificationCenter.current().delegate = self
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
