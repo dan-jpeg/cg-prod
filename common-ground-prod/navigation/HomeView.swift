@@ -152,7 +152,8 @@ struct HomeView: View {
                 
             case .profileView:
                 
-                UserSettingsView()
+                UserSettingsView(menuState: $menuState)
+                    
                 
             case .inboxView:
                 InboxView2(menuState: $menuState, namespace: namespace)

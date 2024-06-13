@@ -29,6 +29,7 @@ struct UserSettingsView: View {
     @State private var isEditing: Bool = false
     @State private var selectedValue: editableValue = .none
     
+    @Binding var menuState: MenuState
 
     var body: some View {
         ZStack {
@@ -110,6 +111,9 @@ struct UserSettingsView: View {
                     }
             }
             .offset(x: !isEditing ? 400 : 0)
+            
+                      
+            
         }
         .foregroundColor(.black)
        
@@ -123,6 +127,26 @@ struct UserSettingsView: View {
                 .allowsHitTesting(false)
                 
         }
+        .overlay(alignment: .bottom) {
+            HStack(spacing: 12) {
+                Image("downArrow")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 12)
+                    .offset(x: 1)
+                    .rotationEffect(Angle(degrees: 90))
+                
+                Text("Return")
+                    .font(.custom("HelveticaNeue-Bold", size: 16))
+                    .foregroundStyle(.black)
+                    
+            }
+            .offset(y: 5)
+            .asButton {
+                menuState = .welcome
+            }
+        }
+
         .onAppear {
             startAnimationLoop()
             withAnimation(.smooth(duration: 4)) {
@@ -346,7 +370,7 @@ struct UserInfoSettingsChildView: View {
 }
 
 #Preview {
-    UserSettingsView()
+    UserSettingsView(menuState: .constant(.profileView))
 }
 
 
@@ -598,9 +622,6 @@ struct ContactSettingsChildView: View {
         }
 }
 
-#Preview {
-    UserSettingsView()
-}
 
 
 struct EditableTextField: View {

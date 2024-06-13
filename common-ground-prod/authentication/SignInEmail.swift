@@ -25,20 +25,13 @@ struct SignInEmailView: View {
                 LogoTextView(namespace: namespace)
             }
             VStack(alignment: .leading) {
-                
-            
-                
                 VStack {
                     CustomTextField(label: "none", placeHolder: "EM", text: $viewModel.email, isSecure: false)
                         .textInputAutocapitalization(.never)
                         .padding()
-                    
                     Divider()
                     CustomTextField(label: "none", placeHolder: "PW", text: $viewModel.password, isSecure: true)
-                        
-                        
                 }
-                
                 HStack {
                     Spacer()
                     HStack(alignment: .center) {
